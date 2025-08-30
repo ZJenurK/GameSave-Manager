@@ -2,7 +2,7 @@
 
 游戏存档自动备份工具
 
-![应用界面](save.png)
+<img src="https://github.com/ZJenurK/GameSave-Manager/blob/main/Save.PNG" alt="Save" width="800">
 
 ## 功能
 
