@@ -1,0 +1,44 @@
+{
+  "name": "game-save-manager",
+  "version": "1.0.0",
+  "description": "游戏存档管理工具",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "lint": "eslint src/**/*.js",
+    "test": "jest"
+  },
+  "keywords": ["game", "save", "backup", "manager", "electron"],
+  "author": "GameSave Manager",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "fs-extra": "^11.1.1"
+  },
+  "build": {
+    "appId": "com.gamesave.manager",
+    "productName": "GameSave Manager",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

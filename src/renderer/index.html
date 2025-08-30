@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameSave Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 自定义标题栏 -->
+    <div class="titlebar">
+        <div class="titlebar-left">
+            <i class="fas fa-gamepad"></i>
+            <span>GameSave Manager</span>
+        </div>
+        <div class="titlebar-right">
+            <button class="titlebar-btn" id="minimize-btn">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button class="titlebar-btn close" id="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="nav-menu">
+                <div class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>仪表盘</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </div>
+                <div class="nav-item" data-page="backups">
+                    <i class="fas fa-history"></i>
+                    <span>备份历史</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 仪表盘页面 -->
+            <div class="page active" id="dashboard">
+                <div class="page-header">
+                    <h1>仪表盘</h1>
+                    <div class="status-indicator">
+                        <div class="status-dot" id="status-dot"></div>
+                        <span id="status-text">未监控</span>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-file-archive"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>存档文件</h3>
+                            <p id="save-file-path">未设置</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>备份目录</h3>
+                            <p id="backup-path">未设置</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-copy"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>备份数量</h3>
+                            <p id="backup-count">0</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>最后备份</h3>
+                            <p id="last-backup">从未</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <button class="btn btn-primary" id="start-monitoring">
+                        <i class="fas fa-play"></i>
+                        开始监控
+                    </button>
+                    <button class="btn btn-secondary" id="stop-monitoring" disabled>
+                        <i class="fas fa-stop"></i>
+                        停止监控
+                    </button>
+                    <button class="btn btn-outline" id="manual-backup">
+                        <i class="fas fa-save"></i>
+                        手动备份
+                    </button>
+                    <button class="btn btn-secondary" id="minimize-to-tray-btn">
+                        <i class="fas fa-window-minimize"></i>
+                        最小化到托盘
+                    </button>
+                </div>
+
+                <div class="activity-log">
+                    <h3>活动日志</h3>
+                    <div class="log-container" id="activity-log">
+                        <p class="log-item">程序已启动</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设置页面 -->
+            <div class="page" id="settings">
+                <div class="page-header">
+                    <h1>设置</h1>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <h3>基本设置</h3>
+                        
+                        <div class="setting-item">
+                            <label>存档文件路径</label>
+                            <div class="input-group">
+                                <input type="text" id="save-file-input" placeholder="选择游戏存档文件">
+                                <button class="btn btn-outline" id="select-save-file">
+                                    <i class="fas fa-folder-open"></i>
+                                    浏览
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <label>备份目录</label>
+                            <div class="input-group">
+                                <input type="text" id="backup-folder-input" placeholder="选择备份存储目录">
+                                <button class="btn btn-outline" id="select-backup-folder">
+                                    <i class="fas fa-folder-open"></i>
+                                    浏览
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>监控设置</h3>
+                        
+                        <div class="setting-item">
+                            <label>检查间隔 (秒)</label>
+                            <input type="number" id="check-interval" min="1" max="60" value="5">
+                        </div>
+
+                        <div class="setting-item">
+                            <label>最大备份数量</label>
+                            <input type="number" id="max-backups" min="5" max="200" value="50">
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="auto-start">
+                                <span class="checkmark"></span>
+                                启动时自动开始监控
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="minimize-to-tray">
+                                <span class="checkmark"></span>
+                                关闭窗口不最小化到托盘
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="auto-start-monitoring">
+                                <span class="checkmark"></span>
+                                开机自启动并自动开始监控
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn btn-primary" id="save-settings">
+                            <i class="fas fa-save"></i>
+                            保存设置
+                        </button>
+                        <button class="btn btn-outline" id="reset-settings">
+                            <i class="fas fa-undo"></i>
+                            重置设置
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 备份历史页面 -->
+            <div class="page" id="backups">
+                <div class="page-header">
+                    <h1>备份历史</h1>
+                    <button class="btn btn-outline" id="refresh-backups">
+                        <i class="fas fa-sync-alt"></i>
+                        刷新
+                    </button>
+                </div>
+
+                <div class="backup-list" id="backup-list">
+                    <!-- 备份项目将在这里动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首次运行设置模态框 -->
+    <div class="modal" id="first-run-modal">
+        <div class="modal-content">
+            <h2>欢迎使用 GameSave Manager</h2>
+            <p>在开始使用之前，请先配置以下设置：</p>
+            
+            <div class="modal-form">
+                <div class="form-group">
+                    <label>选择游戏存档文件</label>
+                    <div class="input-group">
+                        <input type="text" id="first-run-save-file" placeholder="点击浏览选择存档文件">
+                        <button class="btn btn-outline" id="first-run-select-save">
+                            <i class="fas fa-folder-open"></i>
+                            浏览
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>选择备份目录</label>
+                    <div class="input-group">
+                        <input type="text" id="first-run-backup-folder" placeholder="点击浏览选择备份目录">
+                        <button class="btn btn-outline" id="first-run-select-backup">
+                            <i class="fas fa-folder-open"></i>
+                            浏览
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="first-run-complete">
+                    <i class="fas fa-check"></i>
+                    完成设置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content small">
+            <h3 id="confirm-title">确认操作</h3>
+            <p id="confirm-message">您确定要执行此操作吗？</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="confirm-cancel">取消</button>
+                <button class="btn btn-primary" id="confirm-ok">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知消息 -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
